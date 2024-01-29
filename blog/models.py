@@ -66,6 +66,16 @@ class Subblog(models.Model):
         return self.name
 
 
+class Comments(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.SET_NULL, null=True, blank=True, related_name='comments')
+    name = models.CharField(max_length=123)
+    email = models.EmailField()
+    website = models.URLField()
+    message = models.TextField()
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+
 def blog_pre_save(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.name + " - " + timezone.now().date().strftime('%Y-%m-%d %H:%M:%S.%f'))
