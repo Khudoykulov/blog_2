@@ -34,7 +34,7 @@
 
 
 
-                        <h2 class="mb-3 mt-5">#2. {{ subblog.name }}</h2>
+                        <h2 class="mb-3 mt-5">#{{ forloop.counter|add:'1' }}. {{ subblog.name }}</h2>
                         <p>{{ subblog.content|safe }}</p>
                         <p>
                             {#                            <img src="{% static 'images/image_4.html' %}" alt class="img-fluid">#}
@@ -48,7 +48,7 @@
 
 
 
-                                <a href="#" class="tag-cloud-link">{{ tag.name }}({{ tag.tags.count }})</a>
+                                <a href="{% url 'blog:list' %}?tag={{ tag.name }}" class="tag-cloud-link">{{ tag.name }}({{ tag.tags.count }})</a>
                             {% endfor %}
                         </div>
                     </div>
@@ -62,29 +62,58 @@
                         </div>
                     </div>
                     <div class="pt-5 mt-5">
-                        <h3 class="mb-5">{{ comments.count }} Comments</h3>
+                        <h3 class="mb-5">{{ blog.comments.count }} Comments</h3>
+                        
+
+
                         <ul class="comment-list">
-                            {% for comment in comments.all %}
-                                <li class="comment">
+                            {% for comment in comments.all|dictsortreversed:'id' %}
+                                {% if not comment.top_level_comment_id %}
+                            <li class="comment" id="comment-{{ comment.id }}">
                                     <div class="vcard bio">
-                                        <img src="{% if comment.image %}{{ comment.image.url }}{% else %}{% static 'images/73-739007_icon-profile-picture-circle-png.png' %}{% endif %}" alt="Image placeholder">
+                                        <img src="
+                                                {% if comment.image %}{{ comment.image.url }}{% else %}{% static 'images/73-739007_icon-profile-picture-circle-png.png' %}{% endif %}"
+                                             alt="Image placeholder">
                                     </div>
                                     <div class="comment-body">
                                         <h3>{{ comment.name }}</h3>
                                         <div class="meta">{{ comment.created_date|date:"F d, Y \a\t h:i a" }}</div>
                                         <p>{{ comment.message }}</p>
-                                        <p><a href="#" class="reply">Reply</a></p>
+                                        <p><a href="?cid={{ comment.id }}#form_id" class="reply">Reply</a></p>
                                     </div>
-                                </li>
 
+                            {% endif %}
+                            {% for children in comment.children %}
+
+
+
+                                <ul class="children">
+                                    <li class="comment" id="comment-{{ children.id }}">
+                                        <div class="vcard bio">
+                                            <img src="images/person_1.jpg" alt="Image placeholder">
+                                        </div>
+                                        <div class="comment-body">
+                                            <h3>John Doe</h3>
+                                            <div class="meta">Sept. 12, 2019 at 2:21pm</div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem
+                                                laborum necessitatibus,
+                                                ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste
+                                                iure! Quam voluptas
+                                                earum impedit necessitatibus, nihil?</p>
+                                            <p><a href="?cid={{ children.id }}#form_id"  class="reply">Reply</a></p>
+                                        </div>
+                                    </li>
+                                </ul>
+                              {% endfor %}
+
+                            </li>
                             {% endfor %}
-
-
                         </ul>
 
-                        <div class="comment-form-wrap pt-5">
+
+                        <div class="comment-form-wrap pt-5" id="form_id">
                             <h3 class="mb-5">Leave a comment</h3>
-                            <form method="post" enctype="multipart/form-data" class="p-5 bg-light">
+                            <form method="post"  enctype="multipart/form-data" class="p-5 bg-light">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="name">Name *</label>
@@ -107,8 +136,8 @@
                                     {{ form.message }}
                                 </div>
                                 <div class="form-control-image">
-                                        {{ form.image }}
-                                    
+                                    {{ form.image }}
+
                                 </div>
 
                                 <div class="form-group ">
@@ -132,7 +161,8 @@
                         <h3 class="heading-sidebar">Categories</h3>
                         <ul class="categories">
                             {% for category in categories %}
-                                <li><a href="{% url 'blog:list' %}?cat={{ category.name }}">{{ category.name }} <span>({{category.categories.count}})</span></a>
+                                <li><a href="{% url 'blog:list' %}?cat={{ category.name }}">{{ category.name }}
+                                    <span>({{ category.categories.count }})</span></a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -145,14 +175,15 @@
                             <div class="block-21 mb-4 d-flex">
                                 <a class="blog-img mr-4" style="background-image: url({{ foo.image.url }});"></a>
                                 <div class="text">
-                                    <h3 class="heading"><a href="#">{{ foo.name }}</a></h3>
+                                    <h3 class="heading"><a href="{% url 'blog:detail' foo.slug %}">{{ foo.name }}</a></h3>
                                     <div class="meta">
-                                        <div><a href="#"><span
+                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span
                                                 class="icon-calendar"></span> {{ foo.created_date|date:"F d, Y" }} </a>
                                         </div>
-                                        <div><a href="#"><span class="icon-person"></span> {{ foo.author.name }}</a>
+                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span class="icon-person"></span> {{ foo.author.name }}</a>
                                         </div>
-                                        <div><a href="#"><span class="icon-chat"></span>{{ foo.comments.count }}</a></div>
+                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span class="icon-chat"></span>{{ foo.comments.count }}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

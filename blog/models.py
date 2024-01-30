@@ -68,6 +68,8 @@ class Subblog(models.Model):
 
 
 class Comments(models.Model):
+    top_level_comment_id = models.IntegerField(null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True,)
     blog = models.ForeignKey(Blog, on_delete=models.SET_NULL, null=True, blank=True, related_name='comments')
     name = models.CharField(max_length=123)
     email = models.EmailField()
@@ -75,6 +77,12 @@ class Comments(models.Model):
     message = models.TextField()
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def children(self):
+        if not self.top_level_comment_id:
+            return Comments.objects.filter(top_level_comment_id=self.id)
+        return None
 
     def __str__(self):
         return self.name
@@ -104,11 +112,11 @@ class Results(models.Model):
         (1, 'Experience'),
         (3, 'Awards')
     )
-    unit = models.IntegerField(choices=UNIT, default=0)
+    unit = models.IntegerField(choices=UNIT,)
     name = models.CharField(max_length=123)
     company = models.CharField(max_length=123)
-    created_time = models.DateTimeField()
-    deleted_time = models.DateTimeField()
+    created_time = models.DateField()
+    deleted_time = models.DateField()
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
@@ -119,3 +127,20 @@ def blog_pre_save(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(blog_pre_save, sender=Blog)
+
+
+def comment_pre_save(sender, instance, *args, **kwargs):
+    # current = instance
+    # while current.parent:
+    #     current = current.parent
+    # instance.top_level_comment_id = current.id
+
+    if instance.parent:
+        if instance.parent.top_level_comment_id:
+            instance.top_level_comment_id = instance.parent.top_level_comment_id
+        else:
+            instance.top_level_comment_id = instance.parent.id
+
+
+pre_save.connect(comment_pre_save, sender=Comments)
+

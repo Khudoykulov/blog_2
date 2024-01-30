@@ -6,16 +6,19 @@ from django.contrib import messages
 
 def blog_single_view(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
-    comments = Comments.objects.filter(blog=blog)
+    comments = Comments.objects.filter(blog=blog, top_level_comment_id__isnull=True)
     form = CommentForm()
+    cid = request.GET.get('cid')
     if request.method == 'POST':
         form = CommentForm(request.POST, files=request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.blog = blog
+            if cid:
+                obj.parent_id = cid
             form.save()
             messages.success(request, 'You have successfully commentary')
-            return redirect('main:index')
+            return redirect(f'.#comment-{obj.id}')
     blogs_margin = Blog.objects.order_by('-id')[:2]
     categories = Categories.objects.all()
     tags = Tags.objects.all()
