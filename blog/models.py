@@ -7,6 +7,7 @@ from django.db.models.signals import pre_save
 
 
 class AboutMe(models.Model):
+    lname = models.CharField(max_length=123, null=False, blank=False)
     name = models.CharField(max_length=123)
     email = models.EmailField(null=True, blank=True)
     message = models.TextField(null=True, blank=True)
@@ -73,6 +74,42 @@ class Comments(models.Model):
     website = models.URLField()
     message = models.TextField()
     image = models.ImageField(upload_to='images/', null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Services(models.Model):
+    author = models.ForeignKey(AboutMe, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=123)
+    content = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Profession(models.Model):
+    author = models.ForeignKey(AboutMe, on_delete=models.SET_NULL, null=True, blank=True, related_name='profession')
+    name = models.CharField(max_length=123)
+
+    def __str__(self):
+        return self.name
+
+
+class Results(models.Model):
+    UNIT = (
+        (0, 'Education'),
+        (1, 'Experience'),
+        (3, 'Awards')
+    )
+    unit = models.IntegerField(choices=UNIT, default=0)
+    name = models.CharField(max_length=123)
+    company = models.CharField(max_length=123)
+    created_time = models.DateTimeField()
+    deleted_time = models.DateTimeField()
+    content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
 

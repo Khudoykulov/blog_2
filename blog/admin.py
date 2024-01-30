@@ -1,9 +1,25 @@
 from django.contrib import admin
-from .models import AboutMe, Partners, Subblog, Blog, Tags, Categories
+from .models import (
+    AboutMe,
+    Partners,
+    Subblog,
+    Blog,
+    Tags,
+    Categories,
+    Comments,
+    Services,
+    Profession,
+    Results
+)
 
 
 class PartnersInline(admin.TabularInline):
     model = Partners
+    extra = 0
+
+
+class CommentsInline(admin.TabularInline):
+    model = Comments
     extra = 0
 
 
@@ -30,7 +46,7 @@ class BlogAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_date'
     autocomplete_fields = ('author',)
     filter_horizontal = ('tags',)
-    inlines = [SubblogAdminInline]
+    inlines = [SubblogAdminInline,  CommentsInline]
 
 
 @admin.register(Tags)
@@ -47,7 +63,26 @@ class CategoriesAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(Services)
+class ServicesAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'name', 'content', 'created_date',)
+    list_display_links = ('id', 'name', 'content', 'created_date',)
+    search_fields =('name',)
 
+
+@admin.register(Profession)
+class ProfessionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'name')
+    list_display_links = ('id', 'author', 'name')
+    search_fields = ('name',)
+
+
+@admin.register(Results)
+class ResultAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'content', 'created_date',)
+    list_display_links = ('id', 'name', 'content', 'created_date',)
+    search_fields = ('name', 'unit')
+    readonly_fields = ('created_date',)
 
 
 
