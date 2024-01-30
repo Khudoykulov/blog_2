@@ -2,7 +2,12 @@
 {% load static %}
 
 {% block content %}
-
+    <style>
+        .tagcloud a {
+            color: black !important;
+            border: 1px solid #000000 !important;
+        }
+    </style>
     <div class="hero-wrap js-fullheight">
         <div class="overlay"></div>
         <div class="container">
@@ -63,15 +68,16 @@
                     </div>
                     <div class="pt-5 mt-5">
                         <h3 class="mb-5">{{ blog.comments.count }} Comments</h3>
-                        
 
 
                         <ul class="comment-list">
                             {% for comment in comments.all|dictsortreversed:'id' %}
                                 {% if not comment.top_level_comment_id %}
-                            <li class="comment" id="comment-{{ comment.id }}">
+                                    <li class="comment" id="comment-{{ comment.id }}">
                                     <div class="vcard bio">
                                         <img src="
+                                                
+                                                
                                                 {% if comment.image %}{{ comment.image.url }}{% else %}{% static 'images/73-739007_icon-profile-picture-circle-png.png' %}{% endif %}"
                                              alt="Image placeholder">
                                     </div>
@@ -82,7 +88,7 @@
                                         <p><a href="?cid={{ comment.id }}#form_id" class="reply">Reply</a></p>
                                     </div>
 
-                            {% endif %}
+                                {% endif %}
                             {% for children in comment.children %}
 
 
@@ -100,11 +106,11 @@
                                                 ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste
                                                 iure! Quam voluptas
                                                 earum impedit necessitatibus, nihil?</p>
-                                            <p><a href="?cid={{ children.id }}#form_id"  class="reply">Reply</a></p>
+                                            <p><a href="?cid={{ children.id }}#form_id" class="reply">Reply</a></p>
                                         </div>
                                     </li>
                                 </ul>
-                              {% endfor %}
+                            {% endfor %}
 
                             </li>
                             {% endfor %}
@@ -113,7 +119,7 @@
 
                         <div class="comment-form-wrap pt-5" id="form_id">
                             <h3 class="mb-5">Leave a comment</h3>
-                            <form method="post"  enctype="multipart/form-data" class="p-5 bg-light">
+                            <form method="post" enctype="multipart/form-data" class="p-5 bg-light">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="name">Name *</label>
@@ -175,14 +181,17 @@
                             <div class="block-21 mb-4 d-flex">
                                 <a class="blog-img mr-4" style="background-image: url({{ foo.image.url }});"></a>
                                 <div class="text">
-                                    <h3 class="heading"><a href="{% url 'blog:detail' foo.slug %}">{{ foo.name }}</a></h3>
+                                    <h3 class="heading"><a href="{% url 'blog:detail' foo.slug %}">{{ foo.name }}</a>
+                                    </h3>
                                     <div class="meta">
                                         <div><a href="{% url 'blog:detail' foo.slug %}"><span
                                                 class="icon-calendar"></span> {{ foo.created_date|date:"F d, Y" }} </a>
                                         </div>
-                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span class="icon-person"></span> {{ foo.author.name }}</a>
+                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span
+                                                class="icon-person"></span> {{ foo.author.name }}</a>
                                         </div>
-                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span class="icon-chat"></span>{{ foo.comments.count }}</a>
+                                        <div><a href="{% url 'blog:detail' foo.slug %}"><span
+                                                class="icon-chat"></span>{{ foo.comments.count }}</a>
                                         </div>
                                     </div>
                                 </div>

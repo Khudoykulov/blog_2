@@ -45,7 +45,7 @@
                                         <a href="{% url 'blog:detail' blog.slug %}"
                                            class="mr-2">{{ blog.author.name }}</a>
                                         <a href="{% url 'blog:detail' blog.slug %}" class="meta-chat"><span
-                                                class="icon-chat"></span>{{ blog.category.categories.count }}</a>
+                                                class="icon-chat"></span>{{ blog.comments.count }}</a>
                                     </p>
                                 </div>
                                 <p>{{ blog.author_message }}</p>

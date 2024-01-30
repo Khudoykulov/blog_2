@@ -9,7 +9,8 @@ from .models import (
     Comments,
     Services,
     Profession,
-    Results
+    Results,
+    Skills
 )
 
 
@@ -83,6 +84,13 @@ class ResultAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name', 'content', 'created_date',)
     search_fields = ('name', 'unit')
     readonly_fields = ('created_date',)
+
+
+@admin.register(Skills)
+class SkillsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'unit',)
+    list_display_links = ('id', 'name', 'unit',)
+    search_fields = ('name', 'unit')
 
 
 

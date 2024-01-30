@@ -18,6 +18,7 @@ class AboutMe(models.Model):
     project_count = models.IntegerField(null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
+    awards = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -119,6 +120,21 @@ class Results(models.Model):
     deleted_time = models.DateField()
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Skills(models.Model):
+    UNIT = (
+        (0, 'Top'),
+        (1, 'low')
+    )
+    unit = models.IntegerField(choices=UNIT, default=1)
+    name = models.CharField(max_length=123)
+    full = models.IntegerField()
+    Last_week = models.IntegerField(null=True, blank=True)
+    Last_month = models.IntegerField(null=True, blank=True)
 
 
 def blog_pre_save(sender, instance, *args, **kwargs):
