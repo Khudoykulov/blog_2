@@ -76,8 +76,6 @@
                                     <li class="comment" id="comment-{{ comment.id }}">
                                     <div class="vcard bio">
                                         <img src="
-                                                
-                                                
                                                 {% if comment.image %}{{ comment.image.url }}{% else %}{% static 'images/73-739007_icon-profile-picture-circle-png.png' %}{% endif %}"
                                              alt="Image placeholder">
                                     </div>
@@ -96,18 +94,16 @@
                                 <ul class="children">
                                     <li class="comment" id="comment-{{ children.id }}">
                                         <div class="vcard bio">
-                                            <img src="images/person_1.jpg" alt="Image placeholder">
-                                        </div>
+                                        <img src="
+                                                {% if children.image %}{{ children.image.url }}{% else %}{% static 'images/73-739007_icon-profile-picture-circle-png.png' %}{% endif %}"
+                                             alt="Image placeholder">
+                                    </div>
                                         <div class="comment-body">
-                                            <h3>John Doe</h3>
-                                            <div class="meta">Sept. 12, 2019 at 2:21pm</div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem
-                                                laborum necessitatibus,
-                                                ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste
-                                                iure! Quam voluptas
-                                                earum impedit necessitatibus, nihil?</p>
-                                            <p><a href="?cid={{ children.id }}#form_id" class="reply">Reply</a></p>
-                                        </div>
+                                        <h3>{{ children.name }}</h3>
+                                        <div class="meta">{{ children.created_date|date:"F d, Y \a\t h:i a" }}</div>
+                                        <p>{{ children.message }}</p>
+                                        <p><a href="?cid={{ comment.id }}#form_id" class="reply">Reply</a></p>
+                                    </div>
                                     </li>
                                 </ul>
                             {% endfor %}

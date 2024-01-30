@@ -20,6 +20,7 @@ class PartnersInline(admin.TabularInline):
 
 
 class CommentsInline(admin.TabularInline):
+    fields = ('id', 'name')
     model = Comments
     extra = 0
 
