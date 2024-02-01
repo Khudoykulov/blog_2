@@ -14,7 +14,7 @@
             <div class="row no-gutters slider-text js-fullheight justify-content-center align-items-center">
                 <div class="col-lg-10 ftco-animate d-flex align-items-center">
                     <div class="text text-center">
-                        <h1 class="mb-3 bread">Blog Single Post</h1>
+                        <h1 class="mb-3 bread">Blog Single Post</h1>x
                         <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'main:index' %}">Home <i
                                 class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a
                                 href="{% url 'blog:list' %}">Blog <i
@@ -50,9 +50,6 @@
                     <div class="tag-widget post-tag-container mb-5 mt-5">
                         <div class="tagcloud">
                             {% for tag in blog.tags.all %}
-
-
-
                                 <a href="{% url 'blog:list' %}?tag={{ tag.name }}" class="tag-cloud-link">{{ tag.name }}({{ tag.tags.count }})</a>
                             {% endfor %}
                         </div>

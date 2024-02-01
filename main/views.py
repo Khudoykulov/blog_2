@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect,get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import Contact
 from .form import ContactForm
 from django.contrib import messages
@@ -7,9 +7,6 @@ from blog.models import AboutMe, Blog, Services, Results, Skills
 
 def main_index(request):
     skills = Skills.objects.all()
-    for skill in skills:
-        if skill.unit == 0:
-            print(skills)
     results = Results.objects.all()
     services = Services.objects.all()
     blog_all = Blog.objects.all()
